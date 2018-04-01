@@ -15,17 +15,24 @@ const Product = conn.define('product', {
   name: Sequelize.STRING
 });
 
+Category.hasMany(Product);
+Product.belongsTo(Category);
+
 const randoName = (suffix) => {
   var prefix = Math.floor(Math.random() * 999) + 1;
   return `${prefix}-${suffix}`;
 };
 
 const seed = () => {
-  for (var i = 1; i < 5; i++) {
-    Product.create({ name: randoName('Product')});
-    if (i % 2 === 0) {
-      Category.create({ name: randoName('Category')});
-    }
+  for (var i = 1; i < 4; i++) {
+    Category.create({ name: randoName('Category')})
+    .then(category => {
+      let numProducts = Math.floor(Math.random() * 5) + 1;
+      for (var i = 1; i < numProducts; i++) {
+        Product.create({ name: randoName('Product')})
+        .then(product => product.setCategory(category));
+      }
+    });
   }
 };
 
