@@ -16,7 +16,7 @@ const Product = conn.define('product', {
 });
 
 Category.hasMany(Product);
-Product.belongsTo(Category);
+Product.belongsTo(Category, { onDelete: 'cascade' });
 
 const randoName = (suffix) => {
   var prefix = Math.floor(Math.random() * 999) + 1;
